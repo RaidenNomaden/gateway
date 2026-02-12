@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran QRIS - RNWIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-sm">
+        <div class="max-w-md mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-home text-gray-600"></i>
+                    <span class="text-sm text-gray-600">rnwis.com/payment</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-signal text-gray-600"></i>
+                    <i class="fas fa-wifi text-gray-600"></i>
+                    <i class="fas fa-battery-full text-gray-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="max-w-md mx-auto px-4 py-6">
+        <h1 class="text-2xl font-bold">
+            <span class="text-blue-600">RNWIS</span>
+        </h1>
+    </div>
+
+    <!-- Payment Card -->
+    <div class="max-w-md mx-auto px-4 pb-8">
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-center mb-6">Pembayaran QRIS</h2>
+            
+            <!-- QR Code Card -->
+            <div class="bg-white border-2 border-gray-200 rounded-xl p-6 mb-6">
+                <!-- QRIS Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="font-bold text-lg">QRIS</div>
+                        <span class="text-xs text-gray-600">QR Code Standar<br>Pembayaran Nasional</span>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/GPN_logo.svg/200px-GPN_logo.svg.png" alt="GPN" class="h-10">
+                </div>
+
+                <!-- Store Info -->
+                <div class="text-center mb-4">
+                    <h3 class="text-xl font-bold" id="storeName">RNWIS STORE</h3>
+                    <p class="text-sm text-gray-600" id="nmid">Pembayaran Digital QRIS</p>
+                    <p class="text-sm font-semibold mt-1" id="terminal">Scan untuk Bayar</p>
+                </div>
+
+                <!-- QR Code -->
+                <div class="flex justify-center mb-4">
+                    <img src="https://files.catbox.moe/t3bdua.jpg" alt="QRIS Code" class="w-64 h-64 object-contain rounded-lg">
+                </div>
+
+                <!-- Instructions -->
+                <div class="text-center mb-4">
+                    <p class="text-sm font-semibold mb-2">SATU QRIS UNTUK SEMUA</p>
+                    <p class="text-xs text-gray-600">Cek aplikasi penyelenggara</p>
+                    <p class="text-xs text-gray-600">di: www.aspi-qris.id</p>
+                </div>
+
+                <!-- Footer Info -->
+                <div class="text-xs text-gray-500 space-y-1">
+                    <p>Dicetak oleh : 93600503</p>
+                    <p>Versi Cetak : <span id="printDate">2024.10.07</span></p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-around mt-4 pt-4 border-t">
+                    <button onclick="downloadQR()" class="flex flex-col items-center text-blue-600">
+                        <i class="fas fa-download text-xl mb-1"></i>
+                        <span class="text-xs">Simpan QR</span>
+                    </button>
+                    <button onclick="printQR()" class="flex flex-col items-center text-blue-600">
+                        <i class="fas fa-print text-xl mb-1"></i>
+                        <span class="text-xs">Cetak QR</span>
+                    </button>
+                    <button onclick="shareQR()" class="flex flex-col items-center text-blue-600">
+                        <i class="fas fa-share-alt text-xl mb-1"></i>
+                        <span class="text-xs">Bagikan</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Payment Amount (Optional) -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Pembayaran (Opsional)</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-gray-500">Rp</span>
+                    <input type="text" id="amount" placeholder="0" 
+                        class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none text-lg"
+                        oninput="formatAmount(this)">
+                </div>
+            </div>
+
+            <!-- Confirm Button -->
+            <button onclick="confirmPayment()" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-full flex items-center justify-center space-x-2 transition-all">
+                <i class="fab fa-whatsapp text-xl"></i>
+                <span>Konfirmasi Bayar</span>
+            </button>
+
+            <!-- Payment Info -->
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <p>Scan QR Code di atas menggunakan aplikasi:</p>
+                <div class="flex justify-center flex-wrap gap-2 mt-2">
+                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">GoPay</span>
+                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">OVO</span>
+                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">Dana</span>
+                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">ShopeePay</span>
+                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">LinkAja</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial Form -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mt-6">
+            <h3 class="text-xl font-bold mb-4">
+                <i class="fas fa-star text-yellow-500"></i> Berikan Testimoni
+            </h3>
+            <form onsubmit="submitTestimonial(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Anda</label>
+                    <input type="text" id="testimonialName" required
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                    <div class="flex space-x-2" id="ratingStars">
+                        <i class="far fa-star text-3xl cursor-pointer text-gray-300" onclick="setRating(1)"></i>
+                        <i class="far fa-star text-3xl cursor-pointer text-gray-300" onclick="setRating(2)"></i>
+                        <i class="far fa-star text-3xl cursor-pointer text-gray-300" onclick="setRating(3)"></i>
+                        <i class="far fa-star text-3xl cursor-pointer text-gray-300" onclick="setRating(4)"></i>
+                        <i class="far fa-star text-3xl cursor-pointer text-gray-300" onclick="setRating(5)"></i>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Testimoni Anda</label>
+                    <textarea id="testimonialText" required rows="4"
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none"
+                        placeholder="Ceritakan pengalaman Anda..."></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-all">
+                    Kirim Testimoni
+                </button>
+            </form>
+        </div>
+    </div>
+
+    
+    <script>
+        let selectedRating = 0;
+        
+        // Format amount input
+        function formatAmount(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value) {
+                value = parseInt(value).toLocaleString('id-ID');
+            }
+            input.value = value;
+        }
+
+        // Confirm Payment
+        function confirmPayment() {
+            const amount = document.getElementById('amount').value;
+            const storeName = document.getElementById('storeName').textContent;
+            
+            let message = `Halo, saya ingin konfirmasi pembayaran ke ${storeName}`;
+            if (amount) {
+                const cleanAmount = amount.replace(/\./g, '');
+                message += ` sebesar Rp ${amount}`;
+            }
+            message += '. Terima kasih!';
+            
+            const whatsappUrl = `https://wa.me/6285213859916?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Download QR Code
+        function downloadQR() {
+            const link = document.createElement('a');
+            link.download = 'rnwis-qris.jpg';
+            link.href = 'https://files.catbox.moe/t3bdua.jpg';
+            link.click();
+        }
+
+        // Print QR Code
+        function printQR() {
+            window.print();
+        }
+
+        // Share QR Code
+        function shareQR() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'QRIS Payment',
+                    text: 'Scan QR Code untuk pembayaran',
+                    url: window.location.href
+                });
+            } else {
+                alert('Fitur share tidak didukung di browser ini');
+            }
+        }
+
+        // Set Rating
+        function setRating(rating) {
+            selectedRating = rating;
+            const stars = document.querySelectorAll('#ratingStars i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('far');
+                    star.classList.add('fas', 'text-yellow-500');
+                } else {
+                    star.classList.remove('fas', 'text-yellow-500');
+                    star.classList.add('far', 'text-gray-300');
+                }
+            });
+        }
+
+        // Submit Testimonial
+        function submitTestimonial(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('testimonialName').value;
+            const text = document.getElementById('testimonialText').value;
+            
+            if (selectedRating === 0) {
+                alert('Silakan pilih rating terlebih dahulu!');
+                return;
+            }
+            
+            const testimonial = {
+                name: name,
+                rating: selectedRating,
+                text: text,
+                date: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            let testimonials = JSON.parse(localStorage.getItem('testimonials') || '[]');
+            testimonials.push(testimonial);
+            localStorage.setItem('testimonials', JSON.stringify(testimonials));
+            
+            // Reset form
+            document.getElementById('testimonialName').value = '';
+            document.getElementById('testimonialText').value = '';
+            setRating(0);
+            
+            alert('Terima kasih atas testimoni Anda! 🎉');
+        }
+
+        // Initialize
+        window.onload = function() {
+            // Set current date for print version
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('printDate').textContent = `${year}.${month}.${day}`;
+        };
+    </script>
+
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .bg-white.border-2, .bg-white.border-2 * {
+                visibility: visible;
+            }
+            .bg-white.border-2 {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</body>
+</html>
+
